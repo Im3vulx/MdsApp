@@ -2,6 +2,7 @@
 
 namespace App\Form;
 
+use App\Entity\Adresse;
 use App\Entity\Category;
 use App\Entity\Publication;
 use Doctrine\ORM\EntityRepository;
@@ -57,6 +58,20 @@ class PublicationType extends AbstractType
                     'class' => 'form-control'
                 ]
             ])
+            ->add('adresse', EntityType::class, [
+                'class' => Adresse::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')->orderBy('c.street', 'ASC');
+                },
+                'choice_label' => function (Adresse $adresse) {
+                    return $adresse->getStreet();
+                },
+                'label' => 'Adresse',
+                'attr' => [
+                    'class' => 'form-control'
+                ]
+            ])
+            
             ->add('save', SubmitType::class, [
                 'label' => 'Enregistrer',
             ]);
