@@ -51,12 +51,23 @@ class AppFixtures extends Fixture
             $manager->persist($adresse);
         }
 
+        // Création logement
+        for ($l=0; $l < 300; $l++) { 
+            $logement = new Logement();
+
+            $logement->setPrice($faker->randomNumber(3, true))
+                ->setSurface($faker->randomFloat(2,9,70));
+
+            $manager->persist($logement);
+        }
+
         // On push les catégories en BDD
         $manager->flush();
 
         // Récupération des catégories et des adresses créées
         $allCategories = $manager->getRepository(Category::class)->findAll();
         $allAdresses = $manager->getRepository(Adresse::class)->findAll();
+        $allLogments = $manager->getRepository(Logement::class)->findAll();
 
         // Création entre 15 et 30 Articles aléatoirement
         for ($p = 0; $p < mt_rand(150, 300); $p++) {
@@ -70,6 +81,9 @@ class AppFixtures extends Fixture
                 ->setCategory($faker->randomElement($allCategories))
                 ->setAdresse($faker->randomElement($allAdresses))
                 ->setCreatedAt(new \DateTimeImmutable());
+            if ( $publlication->getCategory()->getTitle() == 'logement'){
+                $publlication->setLogement($faker->randomElement($allLogments));
+            }
 
             // On fait persister l'objet
             $manager->persist($publlication);
@@ -97,16 +111,6 @@ class AppFixtures extends Fixture
 
             // On fait persister l'objet
             $manager->persist($user);
-        }
-
-        // Création logement
-        for ($l=0; $l < 100; $l++) { 
-            $logement = new Logement();
-
-            $logement->setPrice($faker->randomNumber(3, true))
-                ->setSurface($faker->randomFloat(2,9,70));
-
-            $manager->persist($logement);
         }
 
         // On envoie le tout en BDD

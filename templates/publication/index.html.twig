@@ -18,6 +18,8 @@
 					<th scope="col">Id</th>
 					<th scope="col">Titre</th>
 					<th scope="col">Description</th>
+					<th scope="col">Prix</th>
+					<th scope="col">Surface</th>
 					<th scope="col">Catégorie</th>
 					<th scope="col">Photo</th>
 					<th scope="col">Rue</th>
@@ -34,6 +36,8 @@
 							<th scope="row">{{ publication.id}}</th>
 							<th>{{ publication.title}}</th>
 							<th>{{ publication.description}}</th>
+							<th>{{ publication.logement.price|default('')}}</th>
+							<th>{{ publication.logement.surface|default('')}}</th>
 							<th>{{ publication.category.title}}</th>
 							<th>{{ publication.photo}}</th>
 							<th>{{ publication.adresse.street}}</th>

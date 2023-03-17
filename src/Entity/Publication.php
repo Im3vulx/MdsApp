@@ -36,6 +36,10 @@ class Publication
     #[ORM\ManyToOne(inversedBy: 'publication')]
     private ?Adresse $adresse = null;
 
+    #[ORM\ManyToOne(inversedBy: 'publication')]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?Logement $logement = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -121,6 +125,18 @@ class Publication
     public function setAdresse(?Adresse $adresse): self
     {
         $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getLogement(): ?Logement
+    {
+        return $this->logement;
+    }
+
+    public function setLogement(?Logement $logement): self
+    {
+        $this->logement = $logement;
 
         return $this;
     }
