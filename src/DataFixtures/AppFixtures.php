@@ -7,6 +7,7 @@ use App\Entity\Category;
 use App\Entity\Logement;
 use App\Entity\Publication;
 use App\Entity\User;
+use App\Entity\Work;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Faker\Factory;
@@ -30,15 +31,25 @@ class AppFixtures extends Fixture
         // Création d'un objet Faker
         $faker = Factory::create('fr_FR');
 
+        // Création de 3 categories et persist
         $hosting = "logement";
         $aide = "aide";
         $emploi = "emploi";
 
-        // Création de 3 categories et persist
         $manager->persist((new Category())->setTitle($hosting));
         $manager->persist((new Category())->setTitle($aide));
         $manager->persist((new Category())->setTitle($emploi));
 
+        // Création des types d'emploi
+        $cdi = "cdi";
+        $cdd = "cdd";
+        $stage = "stage";
+        $alternance = "alternance";
+
+        $manager->persist((new Work())->setTitle($cdi));
+        $manager->persist((new Work())->setTitle($cdd));
+        $manager->persist((new Work())->setTitle($stage));
+        $manager->persist((new Work())->setTitle($alternance));
 
         // Création d'adresse
         for ($a=0; $a < 200; $a++) { 
@@ -68,6 +79,7 @@ class AppFixtures extends Fixture
         $allCategories = $manager->getRepository(Category::class)->findAll();
         $allAdresses = $manager->getRepository(Adresse::class)->findAll();
         $allLogments = $manager->getRepository(Logement::class)->findAll();
+        $allWorks = $manager->getRepository(Work::class)->findAll();
 
         // Création entre 15 et 30 Articles aléatoirement
         for ($p = 0; $p < mt_rand(150, 300); $p++) {
@@ -77,12 +89,14 @@ class AppFixtures extends Fixture
 
             // On nourrit l'objet Publication
             $publlication->setTitle($faker->sentence(6))
-                ->setDescription($faker->paragraph(10))
+                ->setDescription($faker->paragraph(6))
                 ->setCategory($faker->randomElement($allCategories))
                 ->setAdresse($faker->randomElement($allAdresses))
                 ->setCreatedAt(new \DateTimeImmutable());
             if ( $publlication->getCategory()->getTitle() == 'logement'){
                 $publlication->setLogement($faker->randomElement($allLogments));
+            } elseif ($publlication->getCategory()->getTitle() == 'emploi') {
+                $publlication->setWork($faker->randomElement($allWorks));
             }
 
             // On fait persister l'objet

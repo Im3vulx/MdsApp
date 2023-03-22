@@ -40,6 +40,9 @@ class Publication
     #[ORM\JoinColumn(nullable: true)]
     private ?Logement $logement = null;
 
+    #[ORM\ManyToOne(inversedBy: 'publication')]
+    private ?Work $work = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -137,6 +140,18 @@ class Publication
     public function setLogement(?Logement $logement): self
     {
         $this->logement = $logement;
+
+        return $this;
+    }
+
+    public function getWork(): ?Work
+    {
+        return $this->work;
+    }
+
+    public function setWork(?Work $work): self
+    {
+        $this->work = $work;
 
         return $this;
     }

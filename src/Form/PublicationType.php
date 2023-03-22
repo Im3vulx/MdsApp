@@ -2,7 +2,7 @@
 
 namespace App\Form;
 
-use App\Entity\Adresse;
+use App\Entity\Work;
 use App\Entity\Category;
 use App\Entity\Publication;
 use Doctrine\ORM\EntityRepository;
@@ -27,6 +27,24 @@ class PublicationType extends AbstractType
             ->add('description', TextareaType::class, [
                 'label' => 'Description',
                 'required' => false
+            ])->add('logement', LogementType::class, [
+                'label' => 'Logement',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control'
+                ]
+            ])
+            ->add('work', EntityType::class, [
+                'class' => Work::class,
+                'query_builder' => function (EntityRepository $er) {
+                    return $er->createQueryBuilder('c')->orderBy('c.title', 'ASC');
+                },
+                'choice_label' => 'title',
+                'label' => 'Emploi',
+                'required' => false,
+                'attr' => [
+                    'class' => 'form-control'
+                ]
             ])
             ->add('photo', DropzoneType::class, [
                 'label' => 'Photo de la publication',
